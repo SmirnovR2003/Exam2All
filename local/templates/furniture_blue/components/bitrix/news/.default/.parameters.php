@@ -8,5 +8,10 @@ $arTemplateParameters = array(
 		"DEFAULT" => "Y",
 		"PARENT" => 'BASE',
 	),
+	"CANONICAL" => Array(
+		"NAME" => GetMessage("CANONICAL"),
+		"TYPE" => "STRING",
+		"PARENT" => 'BASE',
+	),
 );
 ?>
