@@ -14,6 +14,9 @@ if (
 	&& intval($arParams["NEWS_IBLOCK_ID"]) > 0
 	&& !empty($arParams["NEWS_UF_LINK"])
 ) {
+	ShowError(GetMessage("SIMPLECOMP_EXAM2_UNCORECT_INPUT_PARAMS"));
+	return;
+}
 	if ($this->StartResultCache()) {
 		$rsElements = CIBlockElement::GetList(
 			[],
@@ -96,4 +99,4 @@ if (
 		$this->includeComponentTemplate();
 	}
 	$APPLICATION->SetTitle(GetMessage("PRODUCTS_COUNT", ["#COUNT#"=>$arResult["PRODUCTS_COUNT"]]));
-}
+

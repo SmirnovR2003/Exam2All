@@ -2,11 +2,12 @@
 ---
 <br>
 <p><b><?= GetMessage("SIMPLECOMP_EXAM2_CAT_TITLE") ?>:</b></p>
-<? if (!empty($arResult["NEWS"])) { ?>
+<?if (!empty($arResult["NEWS"])) { ?>
     <ul>
         <? foreach ($arResult["NEWS"] as $key => $value) { ?>
+            <?if (!empty($value)) {?>
             <li>
-                <b><?= $value["NAME"] ?></b> - <?= $value["ACTIVE_FROM"] ?> (<?= implode(", ", $value["SECTIONS_NAMES"]) ?>)
+                <b><?= $value["NAME"] ?></b> - <?= $value["ACTIVE_FROM"] ?> (<?= !empty($value["SECTIONS_NAMES"]) ? implode(", ", $value["SECTIONS_NAMES"]) : ""?>)
                 <? if (!empty($value["ITEMS"])) { ?>
                     <ul>
                         <? foreach ($value["ITEMS"] as $key => $value) { ?>
@@ -20,6 +21,7 @@
                     </ul>
                 <? } ?>
             </li>
+            <?}?>
         <? } ?>
     </ul>
 <? } ?>
