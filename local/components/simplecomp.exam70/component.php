@@ -9,11 +9,11 @@ if (!Loader::includeModule("iblock")) {
 	return;
 }
 
-if (
+if (!(
 	intval($arParams["PRODUCTS_IBLOCK_ID"]) > 0
 	&& intval($arParams["NEWS_IBLOCK_ID"]) > 0
 	&& !empty($arParams["NEWS_UF_LINK"])
-) {
+)) {
 	ShowError(GetMessage("SIMPLECOMP_EXAM2_UNCORECT_INPUT_PARAMS"));
 	return;
 }
@@ -95,8 +95,8 @@ if (
 
 		$arResult["PRODUCTS_COUNT"] = count($prodIds);
 		$this->SetResultCacheKeys(["PRODUCTS_COUNT"]);
-
 		$this->includeComponentTemplate();
+
 	}
 	$APPLICATION->SetTitle(GetMessage("PRODUCTS_COUNT", ["#COUNT#"=>$arResult["PRODUCTS_COUNT"]]));
 
