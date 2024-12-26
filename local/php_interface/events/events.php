@@ -4,6 +4,7 @@
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", array("Ex2", "Ex2_50"));
 AddEventHandler("main", "OnEpilog", array("Ex2", "Ex2_93"));
 AddEventHandler("main", "OnBeforeEventAdd", array("Ex2", "Ex2_51"));
+AddEventHandler("main", "OnBuildGlobalMenu", array("Ex2", "Ex2_95"));
 class Ex2
 {
 	const PRODUCTS_IBLOCK_ID = 2;
@@ -50,15 +51,13 @@ class Ex2
 			);
 		}
 	}
-	
+
 	public static function Ex2_51(&$event, &$lid, &$arFields)
 	{
-		if($event === "FEEDBACK_FORM")
-		{
+		if ($event === "FEEDBACK_FORM") {
 			global $USER;
 			$str = "";
-			if($USER->IsAuthorized())
-			{
+			if ($USER->IsAuthorized()) {
 				$str = GetMessage(
 					"FEEDBACK_AUTH",
 					[
@@ -67,20 +66,39 @@ class Ex2
 						"#USER_NAME#" => $USER->GetFirstName(),
 						"#NAME#" => $arFields["AUTHOR"],
 					]
-					);
-			}
-			else
-			{
+				);
+			} else {
 				$str = GetMessage(
 					"FEEDBACK_NOT_AUTH",
 					[
 						"#NAME#" => $arFields["AUTHOR"],
 					]
-					);
-
+				);
 			}
 
 			$arFields["AUTHOR"] = $str;
 		}
+	}
+
+	public static function Ex2_95(&$aGlobalMenu, &$aModuleMenu)
+	{
+		global $USER;
+		$adminId = 1;
+		$contentId = 5;
+		$groups = $USER->GetUserGroupArray();
+		if(!(!in_array($adminId,$groups) && in_array($contentId,$groups)))
+		{
+			return;
+		}
+		$aGlobalMenu = ["global_menu_content"=>$aGlobalMenu["global_menu_content"]];
+		foreach($aModuleMenu as $key => $value)
+		{
+			if($value["items_id"] === "menu_iblock_/news")
+			{
+				$newaModuleMenu = [$key => $value];
+				break;
+			}
+		}
+		$aModuleMenu = $newaModuleMenu;
 	}
 }
