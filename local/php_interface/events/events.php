@@ -3,6 +3,7 @@
 
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", array("Ex2", "Ex2_50"));
 AddEventHandler("main", "OnEpilog", array("Ex2", "Ex2_93"));
+AddEventHandler("main", "OnBeforeEventAdd", array("Ex2", "Ex2_51"));
 class Ex2
 {
 	const PRODUCTS_IBLOCK_ID = 2;
@@ -47,6 +48,39 @@ class Ex2
 					"DESCRIPTION" => $APPLICATION->GetCurPage(),
 				]
 			);
+		}
+	}
+	
+	public static function Ex2_51(&$event, &$lid, &$arFields)
+	{
+		if($event === "FEEDBACK_FORM")
+		{
+			global $USER;
+			$str = "";
+			if($USER->IsAuthorized())
+			{
+				$str = GetMessage(
+					"FEEDBACK_AUTH",
+					[
+						"#ID#" => $USER->GetID(),
+						"#LOGIN#" => $USER->GetLogin(),
+						"#USER_NAME#" => $USER->GetFirstName(),
+						"#NAME#" => $arFields["AUTHOR"],
+					]
+					);
+			}
+			else
+			{
+				$str = GetMessage(
+					"FEEDBACK_NOT_AUTH",
+					[
+						"#NAME#" => $arFields["AUTHOR"],
+					]
+					);
+
+			}
+
+			$arFields["AUTHOR"] = $str;
 		}
 	}
 }
