@@ -24,13 +24,13 @@ if ($this->StartResultCache($arParams["CACHE_TIME"], $USER->GetID())) {
 
 	$rsUsers = CUser::GetList(
 
-		($by = "id"), 
-		($order = "asc"), 
+		($by = "id"),
+		($order = "asc"),
 		[
 			"!ID" => $USER->GetID(),
-			"ACTIVE" => "Y", 
+			"ACTIVE" => "Y",
 			$arParams["USER_AUTHOR_PROPERTY"] => $curUser[$arParams["USER_AUTHOR_PROPERTY"]]
-		], 
+		],
 		[
 			"FIELDS" => ["ID", "LOGIN"],
 			"SELECT" => [$arParams["USER_AUTHOR_PROPERTY"]]
@@ -39,30 +39,37 @@ if ($this->StartResultCache($arParams["CACHE_TIME"], $USER->GetID())) {
 	$usersIds = [];
 	while ($user = $rsUsers->GetNext()) {
 		$arResult["USERS"][$user["ID"]] = $user;
-		$usersIds[$user["ID"]]=$user["ID"];
+		$usersIds[$user["ID"]] = $user["ID"];
 	}
-	
+
+	if (empty($usersIds)) {
+		$arResult["NEWS_COUNT"] = 0;
+		$this->SetResultCacheKeys(["NEWS_COUNT"]);
+
+		$this->includeComponentTemplate();
+		$APPLICATION->SetTitle(GetMessage("NEWS_COUNT", ["#COUNT#" => $arResult["NEWS_COUNT"]]));
+		return;
+	}
+
 	$rsElements = CIBlockElement::GetList(
 		[],
 		[
 			"IBLOCK_ID" => $arParams["NEWS_IBLOCK_ID"],
 			"ACTIVE" => "Y",
-			"PROPERTY_".$arParams["AUTHOR_PROPERTY"] => array_keys($arResult["USERS"]),
+			"PROPERTY_" . $arParams["AUTHOR_PROPERTY"] => $usersIds,
 		],
 		false,
 		false,
-		[
-		],
+		[],
 	);
 	$newsIds = [];
 	while ($arElement = $rsElements->GetNextElement()) {
 		$props = $arElement->GetProperties();
 		$fields = $arElement->GetFields();
 
-		if(!in_array($curUser["ID"], $props[$arParams["AUTHOR_PROPERTY"]]["VALUE"]))
-		{
+		if (!in_array($curUser["ID"], $props[$arParams["AUTHOR_PROPERTY"]]["VALUE"])) {
 			foreach ($props[$arParams["AUTHOR_PROPERTY"]]["VALUE"] as $key => $value) {
-				if(!in_array($value, $usersIds))
+				if (!in_array($value, $usersIds))
 					continue;
 				$arResult["USERS"][$value]["NEWS"][$fields["ID"]] = $fields;
 			}
