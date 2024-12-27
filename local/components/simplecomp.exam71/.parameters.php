@@ -22,6 +22,11 @@ $arComponentParameters = array(
 			"TYPE" => "STRING",
 			"PARENT" => "BASE"
 		),
+		"ELEMENTS_ON_PAGE" => array(
+			"NAME" => GetMessage("ELEMENTS_ON_PAGE"),
+			"TYPE" => "STRING",
+			"PARENT" => "BASE"
+		),
 		"CACHE_TIME"  =>  Array("DEFAULT"=>3600),
 	),
 );

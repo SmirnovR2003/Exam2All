@@ -26,3 +26,4 @@
         <? } ?>
     </ul>
 <? } ?>
+<?=$arResult["NAV_STRING"]?>

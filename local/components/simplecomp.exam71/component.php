@@ -17,7 +17,12 @@ if (!(
 	ShowError(GetMessage("SIMPLECOMP_EXAM2_UNCORECT_INPUT_PARAMS"));
 	return;
 }
-if ($this->StartResultCache($arParams["CACHE_TIME"],$USER->GetGroups())) {
+$arNavParams = array(
+	"nPageSize" => $arParams["ELEMENTS_ON_PAGE"],
+	"bShowAll" => true,
+);
+$arNavigation = CDBResult::GetNavParams($arNavParams);
+if ($this->StartResultCache($arParams["CACHE_TIME"],[$USER->GetGroups(), $arNavigation])) {
 	$rsElements = CIBlockElement::GetList(
 		[],
 		[
@@ -25,7 +30,7 @@ if ($this->StartResultCache($arParams["CACHE_TIME"],$USER->GetGroups())) {
 			"ACTIVE" => "Y"
 		],
 		false,
-		false,
+		$arNavParams,
 		[
 			"ID",
 			"NAME",
@@ -36,6 +41,7 @@ if ($this->StartResultCache($arParams["CACHE_TIME"],$USER->GetGroups())) {
 		$arResult["CLASSIFIER"][$arElement["ID"]] = $arElement;
 		$classIds[] = $arElement["ID"];
 	}
+	$arResult["NAV_STRING"] = $rsElements->GetPageNavStringEx($navComponentObject, GetMessage("NAV_TITLE"), '', 'Y');
 
 	$arResult["CLASS_COUNT"] = count($classIds);
 	$this->SetResultCacheKeys(["CLASS_COUNT"]);
