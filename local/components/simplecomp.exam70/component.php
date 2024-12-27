@@ -104,6 +104,10 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 			"PROPERTY_PRICE",
 		],
 	);
+
+	$arResult["MIN_PRICE"] = PHP_INT_MAX;
+	$arResult["MAX_PRICE"] = 0;
+
 	$prodIds = [];
 	while ($arElement = $rsElements->GetNext()) {
 
@@ -125,10 +129,21 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 			}
 		}
 		$prodIds[$arElement["ID"]] = $arElement["ID"];
-		$arResult["LAST_ITEM_IBLOCK_ID"] = $arElement["IBLOCK_ID"];
+		if(intval($arElement["PROPERTY_PRICE_VALUE"])>$arResult["MAX_PRICE"])
+		{
+			$arResult["MAX_PRICE"] = $arElement["PROPERTY_PRICE_VALUE"];
+		}
+		if(intval($arElement["PROPERTY_PRICE_VALUE"])<$arResult["MIN_PRICE"])
+		{
+			$arResult["MIN_PRICE"] = $arElement["PROPERTY_PRICE_VALUE"];
+		}
+	}
+	if(count($prodIds) === 0)
+	{
+		$arResult["MAX_PRICE"] = 0;
 	}
 
-	$arButtons = CIBlock::GetPanelButtons($arResult["LAST_ITEM_IBLOCK_ID"], 0, 0, array("SECTION_BUTTONS" => false));
+	$arButtons = CIBlock::GetPanelButtons($arParams["PRODUCTS_IBLOCK_ID"], 0, 0, array("SECTION_BUTTONS" => false));
 	$this->addIncludeAreaIcons(
 		array_merge(
 			CIBlock::GetComponentMenu($APPLICATION->GetPublicShowMode(), $arButtons),
@@ -143,7 +158,7 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 	);
 
 	$arResult["PRODUCTS_COUNT"] = count($prodIds);
-	$this->SetResultCacheKeys(["PRODUCTS_COUNT"]);
+	$this->SetResultCacheKeys(["PRODUCTS_COUNT","MAX_PRICE","MIN_PRICE"]);
 	$this->includeComponentTemplate();
 }
 $APPLICATION->SetTitle(GetMessage("PRODUCTS_COUNT", ["#COUNT#" => $arResult["PRODUCTS_COUNT"]]));
