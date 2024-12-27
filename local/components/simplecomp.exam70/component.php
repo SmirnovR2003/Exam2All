@@ -129,10 +129,6 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 	}
 
 	$arButtons = CIBlock::GetPanelButtons($arResult["LAST_ITEM_IBLOCK_ID"], 0, 0, array("SECTION_BUTTONS" => false));
-
-	echo '<pre>';
-	print_r($arButtons);
-	echo '</pre>';
 	$this->addIncludeAreaIcons(
 		array_merge(
 			CIBlock::GetComponentMenu($APPLICATION->GetPublicShowMode(), $arButtons),
