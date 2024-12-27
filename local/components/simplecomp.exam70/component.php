@@ -96,6 +96,7 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 		false,
 		[
 			"ID",
+			"IBLOCK_ID",
 			"IBLOCK_SECTION_ID",
 			"NAME",
 			"PROPERTY_ARTNUMBER",
@@ -105,6 +106,17 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 	);
 	$prodIds = [];
 	while ($arElement = $rsElements->GetNext()) {
+
+		$arButtons = CIBlock::GetPanelButtons(
+			$arElement["IBLOCK_ID"],
+			$arElement["ID"],
+			0,
+			array("SECTION_BUTTONS" => false, "SESSID" => false)
+		);
+		
+		$arElement["EDIT_LINK"] = $arButtons["edit"]["edit_element"]["ACTION_URL"] ?? '';
+		$arElement["DELETE_LINK"] = $arButtons["edit"]["delete_element"]["ACTION_URL"] ?? '';
+
 		foreach ($arResult["NEWS"] as $key => $value) {
 			if (!isset($value["SECTIONS"]))
 				continue;
@@ -113,7 +125,11 @@ if ($this->StartResultCache(false, isset($_GET["F"]))) {
 			}
 		}
 		$prodIds[$arElement["ID"]] = $arElement["ID"];
+		$arResult["LAST_ITEM_IBLOCK_ID"] = $arElement["IBLOCK_ID"];
 	}
+	
+	$arButtons = CIBlock::GetPanelButtons($arResult["LAST_ITEM_IBLOCK_ID"], 0, 0, array("SECTION_BUTTONS"=>false));
+	$this->addIncludeAreaIcons(CIBlock::GetComponentMenu($APPLICATION->GetPublicShowMode(), $arButtons));
 
 	$arResult["PRODUCTS_COUNT"] = count($prodIds);
 	$this->SetResultCacheKeys(["PRODUCTS_COUNT"]);
