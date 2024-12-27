@@ -42,7 +42,10 @@ if ($this->StartResultCache($arParams["CACHE_TIME"],$USER->GetGroups())) {
 
 
 	$rsElements = CIBlockElement::GetList(
-		[],
+		[
+			"NAME" => "ASC",
+			"SORT" => "ASC",
+		],
 		[
 			"IBLOCK_ID" => $arParams["PRODUCTS_IBLOCK_ID"],
 			"ACTIVE" => "Y",
