@@ -13,7 +13,6 @@
 $this->setFrameMode(true);
 ?>
 <?
-echo '<pre>'; print_r($arResult); echo '</pre>';
 $url = str_replace(
 	[
 		"#PARAM1#",
