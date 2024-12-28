@@ -23,6 +23,8 @@ $arNavParams = array(
 );
 $arNavigation = CDBResult::GetNavParams($arNavParams);
 if ($this->StartResultCache($arParams["CACHE_TIME"],[$USER->GetGroups(), $arNavigation])) {
+	global $CACHE_MANAGER;
+	$CACHE_MANAGER->RegisterTag('iblock_id_3');
 	$rsElements = CIBlockElement::GetList(
 		[],
 		[
