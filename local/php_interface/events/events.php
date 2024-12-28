@@ -1,14 +1,22 @@
-<? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+<?
+
+use Bitrix\Main\Loader;
+
+ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 
 AddEventHandler("iblock", "OnBeforeIBlockElementUpdate", array("Ex2", "Ex2_50"));
 AddEventHandler("main", "OnEpilog", array("Ex2", "Ex2_93"));
 AddEventHandler("main", "OnBeforeEventAdd", array("Ex2", "Ex2_51"));
 AddEventHandler("main", "OnBuildGlobalMenu", array("Ex2", "Ex2_95"));
+AddEventHandler("main", "OnBeforeProlog", array("Ex2", "Ex2_94"));
 class Ex2
 {
 	const PRODUCTS_IBLOCK_ID = 2;
 	const MAX_SHOW_COUNTER = 2;
+	const METATEG_IBLOCK_ID = 6;
+	const ADMIN_ID = 6;
+	const CONTENT_ID = 6;
 	public static function Ex2_50(&$arFields)
 	{
 		if ($arFields["IBLOCK_ID"] == self::PRODUCTS_IBLOCK_ID && $arFields["ACTIVE"] === "N") {
@@ -83,22 +91,44 @@ class Ex2
 	public static function Ex2_95(&$aGlobalMenu, &$aModuleMenu)
 	{
 		global $USER;
-		$adminId = 1;
-		$contentId = 5;
 		$groups = $USER->GetUserGroupArray();
-		if(!(!in_array($adminId,$groups) && in_array($contentId,$groups)))
-		{
+		if (!(!in_array(self::ADMIN_ID, $groups) && in_array(self::CONTENT_ID, $groups))) {
 			return;
 		}
-		$aGlobalMenu = ["global_menu_content"=>$aGlobalMenu["global_menu_content"]];
-		foreach($aModuleMenu as $key => $value)
-		{
-			if($value["items_id"] === "menu_iblock_/news")
-			{
+		$aGlobalMenu = ["global_menu_content" => $aGlobalMenu["global_menu_content"]];
+		foreach ($aModuleMenu as $key => $value) {
+			if ($value["items_id"] === "menu_iblock_/news") {
 				$newaModuleMenu = [$key => $value];
 				break;
 			}
 		}
 		$aModuleMenu = $newaModuleMenu;
+	}
+
+	public static function Ex2_94()
+	{
+		if(!Loader::includeModule("iblock"))
+			return;
+		global $APPLICATION;
+		$rsElements = CIBlockElement::GetList(
+			[],
+			[
+				"IBLOCK_ID" => self::METATEG_IBLOCK_ID,
+				"NAME" => $APPLICATION->GetCurPage(),
+			],
+			false,
+			false,
+			[
+				"ID",
+				"PROPERTY_TITLE",
+				"PROPERTY_DESCRIPTION",
+			]
+		);
+		if ($element = $rsElements->Fetch()) {
+			if (isset($element["PROPERTY_TITLE_VALUE"]) && !empty($element["PROPERTY_TITLE_VALUE"]))
+				$APPLICATION->SetPageProperty("title", $element["PROPERTY_TITLE_VALUE"]);
+			if (isset($element["PROPERTY_DESCRIPTION_VALUE"]) && !empty($element["PROPERTY_DESCRIPTION_VALUE"]))
+				$APPLICATION->SetPageProperty("description", $element["PROPERTY_DESCRIPTION_VALUE"]);
+		}
 	}
 }
