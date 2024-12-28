@@ -95,8 +95,8 @@ if (!(
 
 		$arResult["PRODUCTS_COUNT"] = count($prodIds);
 		$this->SetResultCacheKeys(["PRODUCTS_COUNT"]);
-
 		$this->includeComponentTemplate();
+
 	}
 	$APPLICATION->SetTitle(GetMessage("PRODUCTS_COUNT", ["#COUNT#"=>$arResult["PRODUCTS_COUNT"]]));
 
