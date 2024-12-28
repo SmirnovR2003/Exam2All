@@ -27,5 +27,11 @@ $arTemplateParameters = array(
 		"TYPE" => "CHECKBOX",
 		"DEFAULT" => "Y",
 	),
+	"AJAX_REPORT" => Array(
+		"NAME" => GetMessage("AJAX_REPORT"),
+		"TYPE" => "CHECKBOX",
+		"DEFAULT" => "Y",
+		"PARENT" => 'BASE',
+	),
 );
 ?>
