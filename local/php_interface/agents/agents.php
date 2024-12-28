@@ -32,7 +32,6 @@ function CheckUserCount()
     while ($rsUsers->Fetch()) {
         $userCount++;
     }
-    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/myLog.log', print_r($userCount,true), FILE_APPEND);
 
     $rsUsers = CUser::GetList(
         '',
@@ -53,7 +52,6 @@ function CheckUserCount()
     $curTime = new DateTime();
     $dif = $curTime->getTimestamp() - $lastTime->getTimestamp();
     $dif /= (60 * 60 * 24);
-    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/myLog.log', print_r($dif,true)."\n", FILE_APPEND);
 
     $arEventFields = array(
         "EMAIL_TO" => implode(",", $adminEmails),
