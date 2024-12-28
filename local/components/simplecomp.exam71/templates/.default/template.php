@@ -16,7 +16,7 @@
                                 - <?= $value["PROPERTY_PRICE_VALUE"] ?>
                                 - <?= $value["PROPERTY_MATERIAL_VALUE"] ?>
                                 - <?= $value["PROPERTY_ARTNUMBER_VALUE"] ?>
-                                - <?= $value["DETAIL_PAGE_URL"] ?>
+                                (<?= $value["DETAIL_PAGE_URL"] ?>)
                             </li>
                         <? } ?>
                     </ul>
