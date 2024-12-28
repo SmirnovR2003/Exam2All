@@ -12,7 +12,8 @@ $APPLICATION->SetTitle("Мой компонент 71");
 		"DETAIL_PAGE_TEMPLATE" => "/catalog_exam/#SECTION_ID#/#ELEMENT_CODE#.php",
 		"PRODUCTS_IBLOCK_ID" => "2",
 		"COMPONENT_TEMPLATE" => ".default",
-		"CACHE_GROUPS" => "Y"
+		"CACHE_GROUPS" => "Y",
+		"ELEMENTS_ON_PAGE" => "2"
 	),
 	false
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
