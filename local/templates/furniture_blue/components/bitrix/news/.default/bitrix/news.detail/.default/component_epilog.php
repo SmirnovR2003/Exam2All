@@ -9,13 +9,6 @@ if (isset($arResult["CANONICAL"]) && !empty($arResult["CANONICAL"])) {
 }
 
 if (isset($_REQUEST["REPORT_ADD"])) {
-    $el = new CIBlockElement;
-    if ($USER->IsAuthorized()) {
-        $user = "ID: " . $USER->GetID() . ", Login:" . $USER->GetLogin() . ", Name:" . $USER->GetFullName();
-    } else {
-        $user = "Не авторизован";
-    }
-
     $reportData = [
         'ACTIVE_FROM' => new \Bitrix\Main\Type\DateTime(),
         'USER' => '',
