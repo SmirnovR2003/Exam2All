@@ -1,5 +1,6 @@
 /bitrix/*
 /upload/
+/.vscode/
 
 !/bitrix/php_interface/
 /bitrix/php_interface/*
