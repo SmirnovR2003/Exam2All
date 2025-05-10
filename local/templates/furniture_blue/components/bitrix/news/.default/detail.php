@@ -33,6 +33,7 @@
 		"PAGER_SHOW_ALL" => $arParams["DETAIL_PAGER_SHOW_ALL"],
 		"CHECK_DATES" => $arParams["CHECK_DATES"],
 		"CANONICAL" => $arParams["CANONICAL"],
+		"AJAX_REPORT" => $arParams["AJAX_REPORT"],
 
 		"ELEMENT_ID" => $arResult["VARIABLES"]["ELEMENT_ID"],
 		"ELEMENT_CODE" => $arResult["VARIABLES"]["ELEMENT_CODE"],
